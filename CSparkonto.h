@@ -11,7 +11,7 @@ Kontoverwaltung
 using namespace std;
 
 //Zähler anlegen
-static int fwdKontonummer=1;
+static int fwdKontonummer;
 
 //Klasse CSparkonto anlegen 
 class CSparkonto
@@ -21,29 +21,39 @@ class CSparkonto
 		string Kontoinhaber;
 		float Kontostand;
 		float Habenzinssatz;
+		float Zinsen;
 	public:
-		void Einzahlung(float Einz);
-		void Auszahlung(float Ausz);
-		float GetKontostand();
-		void Kontoauszug();
-		void Zinsberechnung();
-		void ZeigeZinssatz();
-		void SetZinssatz(float Zsatz);
 		CSparkonto();
 		CSparkonto(string KtoInh, float KtoStnd, float HabZins);
+		void	Einzahlung(float Einz);
+		void	Auszahlung(float Ausz);
+		void	Kontoauszug();
+		void	ZeigeZinssatz();
+		void	SetZinssatz(float Zsatz);
+		void	Zinsberechnung();
+		void	Jahresabschluss();
+		string	GetKontonummer();
+		string	GetKontoinhaber();
+		float	GetKontostand();
+		float	GetHabenzinssatz();
+		float	GetZinsen();
 		~CSparkonto();
 };
 
 //Methoden definieren
+
+//Constructor
 CSparkonto::CSparkonto()
 {
 	Kontonummer=fwdKontonummer;
 	fwdKontonummer+=1;
 	Kontostand=0.0;
-	Habenzinssatz=2.0;
+	Habenzinssatz=0.0;
 	Kontoinhaber="UNBEKANNT";
+	Zinsen=0.0;
 }
 
+//Constructor
 CSparkonto::CSparkonto(string KtoInh, float KtoStnd, float HabZins)
 {
 	Kontonummer=fwdKontonummer;
@@ -51,11 +61,7 @@ CSparkonto::CSparkonto(string KtoInh, float KtoStnd, float HabZins)
 	Kontostand=KtoStnd;
 	Habenzinssatz=HabZins;
 	Kontoinhaber=KtoInh;
-}
-
-CSparkonto::~CSparkonto()
-{
-	
+	Zinsen=0.0;
 }
 
 //Einzahlung vornehmen
@@ -70,10 +76,10 @@ void CSparkonto::Auszahlung(float Ausz)
 	Kontostand-=Ausz;
 }
 
-//Kontostand zurückgeben
-float CSparkonto::GetKontostand()
+//Kontoauszug ausgeben
+void CSparkonto::Kontoauszug()
 {
-	return Kontostand;
+	cout << "Kontonummer: " << Kontonummer << "\t" << Kontoinhaber << "\t" << Kontostand << " EUR\n";
 }
 
 //Zinssatz ausgeben
@@ -88,16 +94,52 @@ void CSparkonto::SetZinssatz(float Zsatz)
 	Habenzinssatz=Zsatz;
 }
 
-//Kontoauszug ausgeben
-void CSparkonto::Kontoauszug()
-{
-	cout << "Kontonummer: " << Kontonummer << "\t" << Kontoinhaber << "\t" << Kontostand << " EUR\n";
-}
-
-//Jahreszinsen berechnen
+//Tägliche Zinsberechnung
 void CSparkonto::Zinsberechnung()
 {
-	float Zinsen=0.0;
-	Zinsen=(Kontostand*Habenzinssatz)/100;
+	Zinsen+=(Kontostand*Habenzinssatz)/100;
+}
+
+//Jahresabschluss
+void CSparkonto::Jahresabschluss()
+{
 	Kontostand+=Zinsen;
 }
+
+//Kontonummer zurückgeben
+string CSparkonto::GetKontonummer()
+{
+	string str=to_string(Kontonummer);
+	return str;
+}
+
+//Kontoinhaber zurückgeben
+string CSparkonto::GetKontoinhaber()
+{
+	return Kontoinhaber;
+}
+
+//Kontostand zurückgeben
+float CSparkonto::GetKontostand()
+{
+	return Kontostand;
+}
+
+//Zinssatz zurückgeben
+float CSparkonto::GetHabenzinssatz()
+{
+	return Habenzinssatz;
+}
+
+//Zinsen zurückgeben
+float CSparkonto::GetZinsen()
+{
+	return Zinsen;
+}
+
+//Destructor
+CSparkonto::~CSparkonto()
+{
+	
+}
+
