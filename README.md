@@ -1,1 +1,1 @@
-# Kontoverwaltung-IT12D
+# School project
